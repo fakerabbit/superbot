@@ -355,8 +355,8 @@ function sendToBot(senderID, currentUser, message) {
           const parameters = result.parameters;
           console.log('action: ', action);
           console.log('parameters: ', parameters);
-          if (parameters) {
-            getMeme(senderID, parameters);
+          if (parameters && parameters.meme) {
+            getMeme(senderID, parameters.meme);
           }
           if (action) {
             switch (action) {
