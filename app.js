@@ -49,6 +49,10 @@ const AI_API_TOKEN = (process.env.APIAI_TOKEN) ?
   (process.env.APIAI_TOKEN) :
   config.get('aiToken');
 
+  const GIPHY_KEY = (process.env.GIPHY_KEY) ?
+  (process.env.GIPHY_KEY) :
+  config.get('giphyKey');
+
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
   console.error("Missing config values");
   process.exit(1);
@@ -394,7 +398,7 @@ function getMeme(senderID, parameter) {
     console.log('getMeme: ', parameter);
     const value = encodeURI(parameter);
   request({
-    uri: 'https://api.giphy.com/v1/gifs/search?api_key=BM3Z2Xn4cLQz2skbzJTB4w4MwHR6f26s&limit=50&rating=pg&q=' + value,
+    uri: 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_KEY + '&limit=50&rating=pg&q=' + value,
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var parsed = JSON.parse(body);
