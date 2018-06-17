@@ -12,8 +12,8 @@ const
   path = require("path"),
   builder = require('botbuilder');
 
-const { WitRecognizer } = require('botbuilder-wit');
-const { IntentDialog } = require('botbuilder');
+const WitRecognizer = require('botbuilder-wit/lib/WitRecognizer');
+const IntentDialog = require('botbuilder/lib/dialogs/IntentDialog');
 const recognizer = new WitRecognizer('Wit.ai_access_token');
 const intents = new IntentDialog({recognizers: [recognizer]});
 
