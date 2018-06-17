@@ -9,7 +9,8 @@ const
   apiai = require('apiai'),
   request = require('request'),
   uuid = require('uuid'),
-  path = require("path");
+  path = require("path"),
+  builder = require('botbuilder');
 
 var app = express();
 var currentUser = null;
@@ -68,7 +69,52 @@ app.get('/privacy',function(req,res){
 
 });
 
+// Create chat bot and listen to messages
+var connector = new builder.ChatConnector({
+  appId: process.env.MICROSOFT_APP_ID,
+  appPassword: process.env.MICROSOFT_APP_PASSWORD
+});
+app.post('/messages', connector.listen());
+
+// Bot Storage: Here we register the state storage for your bot. 
+// Default store: volatile in-memory store - Only for prototyping!
+// We provide adapters for Azure Table, CosmosDb, SQL Azure, or you can implement your own!
+// For samples and documentation, see: https://github.com/Microsoft/BotBuilder-Azure
+var inMemoryStorage = new builder.MemoryBotStorage();
+
 var bot = apiai(AI_API_TOKEN);
+
+var skypeBot = new builder.UniversalBot(connector, [
+  function (session) {
+      // prompt for search option
+      builder.Prompts.choice(
+          session,
+          'Hi',
+          );
+  },
+  function (session, result) {
+      if (!result.response) {
+          // exhausted attemps and no selection, start over
+          session.send('Ooops! Too many attemps :( But don\'t worry, I\'m handling that exception and you can try again!');
+          return session.endDialog();
+      }
+
+      // on error, start over
+      session.on('error', function (err) {
+          session.send('Failed with message: %s', err.message);
+          session.endDialog();
+      });
+
+      // continue on proper dialog
+      var selection = result.response.entity;
+      console.log('SKYPE result.response: ', result.response);
+  }
+]).set('storage', inMemoryStorage); // Register in memory storage
+
+// log any bot errors into the console
+skypeBot.on('error', function (e) {
+  console.log('And error ocurred in skype bot: ', e);
+});
 
 /*
  * Use your own validation token. Check that the token used in the Webhook
