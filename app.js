@@ -12,6 +12,11 @@ const
   path = require("path"),
   builder = require('botbuilder');
 
+const { WitRecognizer } = require('botbuilder-wit');
+const { IntentDialog } = require('botbuilder');
+const recognizer = new WitRecognizer('Wit.ai_access_token');
+const intents = new IntentDialog({recognizers: [recognizer]});
+
 var app = express();
 var currentUser = null;
 app.set('port', process.env.PORT || 5000);
@@ -84,29 +89,14 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 
 var bot = apiai(AI_API_TOKEN);
 
-var skypeBot = new builder.UniversalBot(connector, [
-  function (session, response) {
-      session.send('Welcome to the SuperBot!');
-      console.log('skype response: ', response);
-  },
-  function (session, result) {
-      if (!result.response) {
-          // exhausted attemps and no selection, start over
-          session.send('Ooops! Too many attemps :( But don\'t worry, I\'m handling that exception and you can try again!');
-          return session.endDialog();
-      }
-
-      // on error, start over
-      session.on('error', function (err) {
-          session.send('Failed with message: %s', err.message);
-          session.endDialog();
-      });
-
-      // continue on proper dialog
-      var selection = result.response.entity;
-      console.log('SKYPE result.response: ', result.response);
-  }
-]).set('storage', inMemoryStorage); // Register in memory storage
+var skypeBot = new builder.UniversalBot(connector).set('storage', inMemoryStorage); // Register in memory storage
+intents.matches('giphy', (session, args) => {
+  console.log('intent matches giphy: ', args);
+});
+intents.onDefault(session => {
+  console.log('default...');
+});
+skypeBot.dialog('/', intents);
 
 // log any bot errors into the console
 skypeBot.on('error', function (e) {
