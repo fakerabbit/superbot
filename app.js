@@ -85,8 +85,9 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = apiai(AI_API_TOKEN);
 
 var skypeBot = new builder.UniversalBot(connector, [
-  function (session) {
+  function (session, response) {
       session.send('Welcome to the SuperBot!');
+      console.log('skype response: ', response);
   },
   function (session, result) {
       if (!result.response) {
