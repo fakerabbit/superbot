@@ -86,11 +86,7 @@ var bot = apiai(AI_API_TOKEN);
 
 var skypeBot = new builder.UniversalBot(connector, [
   function (session) {
-      // prompt for search option
-      builder.Prompts.choice(
-          session,
-          'Hi',
-          );
+      session.send('Welcome to the SuperBot!');
   },
   function (session, result) {
       if (!result.response) {
