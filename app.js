@@ -72,7 +72,8 @@ var bot = apiai(AI_API_TOKEN);
 
 const Telegraf = require('telegraf');
 const telegramBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
-telegramBot.hears('hola', (ctx) => ctx.reply('Hola humano!'))
+telegramBot.hears('hola', (ctx) => ctx.reply('Hola humano!'));
+telegramBot.startPolling();
 
 /*
  * Use your own validation token. Check that the token used in the Webhook
