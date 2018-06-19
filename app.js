@@ -82,7 +82,7 @@ telegramBot.startPolling();
 
 function sendTelegramToBot(ctx, message) {
   const request = bot.textRequest(message, {
-    sessionId: 'telegramBot' + new Date(),
+    sessionId: 'telegramBot',
   });
 
   request.on('response', function(response) {
