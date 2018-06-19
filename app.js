@@ -128,7 +128,7 @@ function getTelegramMeme(ctx, parameter) {
       if (meme && meme.images && meme.images.fixed_width) {
         var giphy = meme.images.fixed_width;
         var giphy = meme.images.fixed_width;
-        ctx.replyWithPhoto(giphy.url);
+        ctx.replyWithDocument(giphy.url);
       }
     } else {
       console.error("Failed calling Send API", response.statusCode, response.statusMessage, body.error);
