@@ -70,6 +70,10 @@ app.get('/privacy',function(req,res){
 
 var bot = apiai(AI_API_TOKEN);
 
+const Telegraf = require('telegraf');
+const telegramBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
+telegramBot.hears('hola', (ctx) => ctx.reply('Hola humano!'))
+
 /*
  * Use your own validation token. Check that the token used in the Webhook
  * setup is the same token used here.
