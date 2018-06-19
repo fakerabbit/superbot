@@ -71,7 +71,8 @@ app.get('/privacy',function(req,res){
 var bot = apiai(AI_API_TOKEN);
 
 const Telegraf = require('telegraf');
-const telegramBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
+const telegramBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+telegramBot.start((ctx) => ctx.reply('Bienvenido!'));
 telegramBot.hears('hola', (ctx) => ctx.reply('Hola humano!'));
 telegramBot.startPolling();
 
