@@ -9,13 +9,7 @@ const
   apiai = require('apiai'),
   request = require('request'),
   uuid = require('uuid'),
-  path = require("path"),
-  builder = require('botbuilder');
-
-const WitRecognizer = require('botbuilder-wit/lib/WitRecognizer');
-const IntentDialog = require('botbuilder/lib/dialogs/IntentDialog');
-const recognizer = new WitRecognizer('Wit.ai_access_token');
-const intents = new IntentDialog({recognizers: [recognizer]});
+  path = require("path");
 
 var app = express();
 var currentUser = null;
@@ -74,34 +68,7 @@ app.get('/privacy',function(req,res){
 
 });
 
-// Create chat bot and listen to messages
-var connector = new builder.ChatConnector({
-  appId: process.env.MICROSOFT_APP_ID,
-  appPassword: process.env.MICROSOFT_APP_PASSWORD
-});
-app.post('/messages', connector.listen());
-
-// Bot Storage: Here we register the state storage for your bot. 
-// Default store: volatile in-memory store - Only for prototyping!
-// We provide adapters for Azure Table, CosmosDb, SQL Azure, or you can implement your own!
-// For samples and documentation, see: https://github.com/Microsoft/BotBuilder-Azure
-var inMemoryStorage = new builder.MemoryBotStorage();
-
 var bot = apiai(AI_API_TOKEN);
-
-var skypeBot = new builder.UniversalBot(connector).set('storage', inMemoryStorage); // Register in memory storage
-intents.matches('giphy', (session, args) => {
-  console.log('intent matches giphy: ', args);
-});
-intents.onDefault(session => {
-  console.log('default...');
-});
-skypeBot.dialog('/', intents);
-
-// log any bot errors into the console
-skypeBot.on('error', function (e) {
-  console.log('And error ocurred in skype bot: ', e);
-});
 
 /*
  * Use your own validation token. Check that the token used in the Webhook
